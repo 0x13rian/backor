@@ -30,20 +30,7 @@ export default function DashboardPage() {
   const {
     ready,
     authenticated,
-    user,
-    logout,
-    linkEmail,
-    linkWallet,
-    unlinkEmail,
-    linkPhone,
-    unlinkPhone,
-    unlinkWallet,
-    linkGoogle,
-    unlinkGoogle,
-    linkTwitter,
-    unlinkTwitter,
-    linkDiscord,
-    unlinkDiscord,
+    user
   } = usePrivy();
 
   useEffect(() => {
@@ -54,21 +41,11 @@ export default function DashboardPage() {
     console.log(user)
   }, [ready, authenticated, router]);
 
-  const numAccounts = user?.linkedAccounts?.length || 0;
-  const canRemoveAccount = numAccounts > 1;
-
-  const email = user?.email;
-  const phone = user?.phone;
-  const wallet = user?.wallet;
-
-  const googleSubject = user?.google?.subject || null;
-  const twitterSubject = user?.twitter?.subject || null;
-  const discordSubject = user?.discord?.subject || null;
-
   const getBalance = async () => {
     const provider = getProvider();
     const signer = await getSigner()
     const address = signer.getAddress()
+    console.log(await address)
     const balance = await provider.getBalance(address);
     return balance
   }
@@ -83,7 +60,7 @@ export default function DashboardPage() {
   return (
     <>
       <Head>
-        <title>dynasty</title>
+        <title>Dynasty</title>
       </Head>
 
       <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
@@ -96,18 +73,18 @@ export default function DashboardPage() {
                   <StatLabel>Balance</StatLabel>
                   <StatNumber>💸 {userBalance} ETH</StatNumber>
                 </Stat>
-                <Avatar className="ml-8" bg='green.500' />
+                <Avatar src={"https://effigy.im/a/"+user?.wallet?.address+".png"} className="ml-8" bg='green.500' />
               </div>
             </div>
             <div className="snap-y snap-mandatory place-self-center overflow-y-scroll">
               <div className="h-screen snap-always snap-center">
               {SPORT_TEAMS.map((team: string, index: number) =>
                 <div className="h-screen snap-always snap-center">
-                  <TeamCard key={index} team={team} />~
+                  <TeamCard key={index} team={team} />
                 </div>
               )}
             </div>
-            </div>~
+            </div>
           </>
         ) : null}
       </main>

@@ -20,8 +20,8 @@ function MyApp({Component, pageProps}: AppProps) {
         <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
         <link rel="manifest" href="/favicons/manifest.json" />
 
-        <title>dynasty</title>
-        <meta name="description" content="dynasty" />
+        <title>Dynasty</title>
+        <meta name="description" content="Dynasty" />
       </Head>
       <Providers>
         <PrivyProvider

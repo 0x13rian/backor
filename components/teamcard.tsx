@@ -1,7 +1,7 @@
 "use client"
 
 import { EloInfo, getProvider, getSigner } from "@/lib/evm/contract";
-import { Text, Card, CardBody, Stack, Heading, CardFooter, ButtonGroup, Button, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stat, StatArrow, StatHelpText, StatLabel, StatNumber } from "@chakra-ui/react";
+import { Text, Card, CardBody, Stack, Heading, CardFooter, ButtonGroup, Button, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stat, StatArrow, StatHelpText, StatLabel, StatNumber, Avatar, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
 import { randomInt } from "crypto";
@@ -83,7 +83,14 @@ export function TeamCard({
 
         const rating: EloInfo[] = await contract.getTeamEloRankingBetween(team, 0, Date.now());
         setHistEloInfo(rating.filter((i) => { return Number(i.elo) != 0 }).map((i) => { return { "time": i.timestamp, "elo": Number(i.elo) } }))
-        console.log(rating)
+        if (rating.length > 0) {
+            console.log("HI")
+            console.log(rating)
+            let diff = Number(rating[rating.length - 1].elo - rating[rating.length - 2].elo)
+            setRatingChange(diff)
+            console.log(diff)
+            console.log(diff > 0)
+        }
     }
 
     const handleUpdateOracle = async () => {
@@ -118,7 +125,7 @@ export function TeamCard({
         const contract = new DexContract({ client: await getSigner() });
 
         const rating: PerpContract[] = await contract.getContracts();
-        setUserContracts(rating)
+        setUserContracts(rating.filter((i)=>i.team == team))
     }
 
     const handleOpenContract = async () => {
@@ -142,25 +149,37 @@ export function TeamCard({
         console.log(Number(amount).toFixed(2))
         setUserBalance(Number(amount))
     }
+
+    const [teamContracts, setTeamContracts] = useState<PerpContract[]>([])
+    const handleSeeWhoseBuying = async () => {
+        const contract = new DexContract({ client: await getSigner() });
+        const rating: PerpContract[] = await contract.getTeamContracts(team);
+        setTeamContracts(rating)
+    }
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [ratingChange, setRatingChange] = useState(0)
+
     return (
         <div className="mb-12">
             <Card minW='md'>
                 <CardBody>
                     <Stack mt='6' spacing='3'>
-                        <div className="flex items-center">
+                        <div className="flex items-center mb-8">
                             <Image
                                 src={getTeamLogo(team)}
                                 borderRadius='lg'
-                                width="128px"
+                                height="100px"
                                 ml="4"
                             />
                             <Heading ml="4" size='lg'>{team || "Unknown"}</Heading>
-                            <Stat ml="4">
+                            <Stat ml="8">
                               <StatLabel>Rating</StatLabel>
                               <StatNumber>{eloInfo.elo.toString()}</StatNumber>
                               <StatHelpText>
-                                <StatArrow type='increase' />
-                                23.36%
+                                <StatArrow type={ratingChange > 0 ? "increase" : "decrease"} />
+                                {ratingChange}
                               </StatHelpText>
                             </Stat>
                             {/* 
@@ -179,7 +198,7 @@ export function TeamCard({
                         </div>
 
                         <LineChart width={350} height={200} data={histEloInfo}
-                            margin={{ top: 5, right: 0, left: 10, bottom: 5 }}>
+                            margin={{ top: 20, right: 0, left: 10, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
                             <YAxis domain={[Math.min(...histEloInfo.map(i => i.elo)) - 10, Math.min(...histEloInfo.map(i => i.elo)) + 10]} />
@@ -198,11 +217,11 @@ export function TeamCard({
                         <ButtonGroup alignItems="center" spacing='12'>
                             <Popover size="lg">
                                 <PopoverTrigger>
-                                    <Button onClick={getUserContracts} variant='outline' colorScheme='gray' size='lg'>
+                                    <Button borderRadius="full" onClick={getUserContracts} variant='outline' colorScheme='gray' size='lg'>
                                         💲
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent>
+                                <PopoverContent w="md">
                                     <PopoverArrow />
                                     <PopoverCloseButton />
                                     <PopoverBody>
@@ -219,8 +238,8 @@ export function TeamCard({
                                                       <Tr>
                                                           <Td>{(Math.round(Number(contract.quantity)/100000000000)).toString()} {contract.team} Tokens</Td>
                                                           <Td>
-                                                              <Button isDisabled={!contract.isOpen}
-                                                                  onClick={() => handleCloseContract(contract.id.toString())} size="sm">{contract.isOpen ? "Close Contract💲" : "Closed"}</Button>
+                                                              <Button borderRadius="full" isDisabled={!contract.isOpen}
+                                                                  onClick={() => handleCloseContract(contract.id.toString())} size="sm">{contract.isOpen ? "Sell" : "Sold"}</Button>
                                                           </Td>
                                                       </Tr>
                                                   )}
@@ -233,17 +252,18 @@ export function TeamCard({
 
                             <Popover>
                                 <PopoverTrigger>
-                                    <Button variant='outline' colorScheme='green' size='lg'>
+                                    <Button borderRadius="full" variant='outline' colorScheme='green' size='lg'>
                                         💚
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent>
+                                <PopoverContent w="md">
                                     <PopoverArrow />
                                     <PopoverCloseButton />
                                     <PopoverHeader>How much would you like to invest?</PopoverHeader>
                                     <PopoverBody>
-                                        <Text fontSize='4xl'>💸 {userBalance.toFixed(2)} ETH</Text>
-                                        <Slider colorScheme="green" className="mb-12 mt-12" aria-label='slider'
+                                        <Stack>
+                                        <Text alignSelf="center" fontSize='4xl'>💸 {userBalance.toFixed(2)} ETH</Text>
+                                        <Slider alignSelf="center" w="80%" defaultValue={0} colorScheme="green" className="mb-12 mt-12" aria-label='slider'
                                             onChange={handleSliderChange}>
                                             <SliderMark value={25} {...labelStyles}>
                                                 25%
@@ -270,9 +290,51 @@ export function TeamCard({
                                             </SliderTrack>
                                             <SliderThumb />
                                         </Slider>
-                                        <Button colorScheme="green" onClick={handleOpenContract}>Confirm</Button>
+                                        <Button borderRadius="full" colorScheme="green" onClick={handleOpenContract}>Confirm</Button>
+                                        </Stack>
+                                        
                                     </PopoverBody>
                                 </PopoverContent>
+                            </Popover>
+
+                            <Popover>
+                            <PopoverTrigger>
+                                <Button onClick={handleSeeWhoseBuying} borderRadius="full" size="lg" variant="outline" colorScheme="blue">
+                                    👥
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent w="md">
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverBody>
+                                    <TableContainer w="sm">
+                                        <Table variant='simple'>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Supporter</Th>
+                                                    <Th>Invested Amount</Th>
+                                                    <Th>Elo</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {teamContracts ?
+                                                    <>
+                                                        {teamContracts.map((contract) =>
+                                                            <Tr>
+                                                                <Td><Avatar src={'https://effigy.im/a/'+contract.longParty+'.png'} /></Td>
+                                                                <Td>{(Math.round(Number(contract.quantity)/100000000000)).toString()} Tokens</Td>
+                                                                <Td>{contract.initialElo.toString()}</Td>
+                                                            </Tr>
+                                                        )}
+                                                    </>
+                                                    : <>
+                                                        No Backers. Be the first to support the team!
+                                                    </>}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </PopoverBody>
+                            </PopoverContent>
                             </Popover>
                         </ButtonGroup>
                     </Box>

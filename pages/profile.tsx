@@ -69,7 +69,7 @@ export default function ProfilePage() {
         {ready && authenticated ? (
           <>
             <Menu />
-            <div className="flex flex-row justify-between">
+            <div className="mt-8 flex flex-row justify-between">
               <h1 className="text-2xl font-semibold">Profile</h1>
               <button
                 onClick={logout}
@@ -79,6 +79,9 @@ export default function ProfilePage() {
               </button>
             </div>
             <div className="mt-12 flex gap-4 flex-wrap">
+              <Button colorScheme='green'>
+                  <Link isExternal href="https://onramp-sandbox.gatefi.com/?merchantId=e2903522-6007-4c48-8b34-b03eb8efb077" target="_blank">Buy via Unlimit Crypto</Link>
+              </Button>
               {googleSubject ? (
                 <button
                   onClick={() => {
