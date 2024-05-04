@@ -3,6 +3,7 @@ import type {AppProps} from 'next/app';
 import Head from 'next/head';
 import {PrivyProvider} from '@privy-io/react-auth';
 import {useRouter} from 'next/router';
+import { Providers } from '../components/providers';
 
 function MyApp({Component, pageProps}: AppProps) {
   const router = useRouter();
@@ -20,15 +21,17 @@ function MyApp({Component, pageProps}: AppProps) {
         <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
         <link rel="manifest" href="/favicons/manifest.json" />
 
-        <title>Privy Auth Starter</title>
-        <meta name="description" content="Privy Auth Starter" />
+        <title>backor</title>
+        <meta name="description" content="backor" />
       </Head>
-      <PrivyProvider
-        appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
-        onSuccess={() => router.push('/dashboard')}
-      >
-        <Component {...pageProps} />
-      </PrivyProvider>
+      <Providers>
+        <PrivyProvider
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
+          onSuccess={() => router.push('/dashboard')}
+        >
+          <Component {...pageProps} />
+        </PrivyProvider>
+      </Providers>
     </>
   );
 }
