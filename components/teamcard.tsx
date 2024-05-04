@@ -1,17 +1,27 @@
 import { Card, CardBody, Stack, Heading, Divider, CardFooter, ButtonGroup, Button, Text, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box } from "@chakra-ui/react";
 import { useState } from "react";
+import { LineChart, CartesianGrid, XAxis, YAxis, Legend, Line, Tooltip } from "recharts";
 
 
   
 export function TeamCard() {
-    const [sliderValue, setSliderValue] = useState(1500)
-    const labelStyles = {
-        mt: '2',
-        ml: '-2.5',
-        fontSize: 'sm',
-      }
+      const data = [
+        {
+          "name": "t1",
+          "elo": 2800,
+        },
+        {
+          "name": "t2",
+          "elo": 2900,
+        },
+        {
+          "name": "t3",
+          "elo": 2700,
+        }
+      ]
+
     return (
-        <>
+        <div className="mb-12">
             <Card maxW='sm'>
                 <CardBody>
                     <Image
@@ -19,31 +29,16 @@ export function TeamCard() {
                     borderRadius='lg'
                     />
                     <Stack mt='6' spacing='3'>
-                    <Heading size='md'>Manchester United</Heading>
+                    <Heading mb="4" size='md'>Manchester United</Heading>
 
-                    <Slider defaultValue={1500} min={0} max={3000} step={100} className="mt-12" aria-label='slider-ex-6' onChange={(val) => setSliderValue(val)}>
-                        <SliderMark value={100} {...labelStyles}>
-                        0
-                        </SliderMark>
-                        <SliderMark value={2750} {...labelStyles}>
-                        3000
-                        </SliderMark>
-                        <SliderMark
-                        value={sliderValue}
-                        textAlign='center'
-                        bg='blue.500'
-                        color='white'
-                        mt='-10'
-                        ml='-5'
-                        w='12'
-                        >
-                        {sliderValue}
-                        </SliderMark>
-                        <SliderTrack>
-                        <SliderFilledTrack />
-                        </SliderTrack>
-                        <SliderThumb />
-                    </Slider>
+                    <LineChart width={340} height={200} data={data}
+                        margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="elo" stroke="#82ca9d" />
+                    </LineChart>
                     
                     </Stack>
                 </CardBody>
@@ -68,7 +63,7 @@ export function TeamCard() {
                     </Box>             
                 </CardFooter>
             </Card>
-        </>
+        </div>
         
     );
 }

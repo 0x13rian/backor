@@ -82,32 +82,11 @@ export default function DashboardPage() {
               <Avatar className="ml-8" bg='teal.500' />
             </div>
 
-            <div className="snap-y snap-mandatory place-self-center overflow-y-scroll">
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-
+            <div className="place-self-center">
+              <TeamCard />
+              <TeamCard />
+              <TeamCard />
+              <TeamCard />
             </div>
           </>
         ) : null}
