@@ -3,10 +3,11 @@ import { usePrivy } from "@privy-io/react-auth";
 import { PrivyClient } from "@privy-io/server-auth";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import { Image } from "@chakra-ui/react"
+import { useEffect } from "react";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const cookieAuthToken = req.cookies["privy-token"];
-
   // If no cookie is found, skip any further checks
   if (!cookieAuthToken) return { props: {} };
 
@@ -22,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     return {
       props: {},
-      redirect: { destination: "/fund", permanent: false },
+      // redirect: { destination: "/fund", permanent: false },
     };
   } catch (error) {
     return { props: {} };
@@ -30,7 +31,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 export default function LoginPage() {
-  const { login } = usePrivy();
+  const { ready, authenticated, login, logout, } = usePrivy();
+
+  useEffect(() => {
+    (async () => {
+      if (ready && authenticated) {
+        await logout()
+      }
+    })
+  }, [ready, authenticated]);
 
   return (
     <>
@@ -42,8 +51,20 @@ export default function LoginPage() {
         <div className="flex flex-1 p-6 justify-center items-center">
           <div>
             <div>
-              Dynasty
+              <div className="flex items-center justify-center">
+                <Image
+                  className="h-8 w-8 flex "
+                  src="/images/logo.png"
+                  alt="avatar placeholder"
+                  width="128px"
+                  height="128px"
+                />
+              </div>
+              <div className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl font-bold">
+                Dynasty
+              </div>
             </div>
+
             <div className="mt-6 flex justify-center text-center">
               <button
                 className="bg-green-600 hover:bg-green-700 py-3 px-6 text-white rounded-lg"
