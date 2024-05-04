@@ -142,6 +142,14 @@ export function TeamCard({
         console.log(Number(amount).toFixed(2))
         setUserBalance(Number(amount))
     }
+
+    const [teamContracts, setTeamContracts] = useState<PerpContract[]>([])
+    const handleSeeWhoseBuying = async () => {
+        const contract = new DexContract({ client: await getSigner() });
+        const rating: PerpContract[] = await contract.getTeamContracts(team);
+        setTeamContracts(rating)
+    }
+
     return (
         <div className="mb-12">
             <Card minW='lg'>
@@ -252,8 +260,8 @@ export function TeamCard({
                     </Box>
 
                     <div className="flex">
-                        <Button onClick={getUserContracts} size="sm">
-                            Load Contracts
+                        <Button onClick={handleSeeWhoseBuying} size="sm">
+                            Backers!
                         </Button>
 
                         <TableContainer>
@@ -262,22 +270,25 @@ export function TeamCard({
                                     <Tr>
                                         <Th>Quantity</Th>
                                         <Th>Invested Amount</Th>
+                                        <Th>Backer</Th>
                                         <Th>Elo</Th>
-                                        <Th></Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {userContracts.map((contract) =>
-                                        <Tr>
-                                            <Td>{contract.quantity.toString()} {contract.team} Tokens</Td>
-                                            <Td>{ethers.formatEther(contract.initialAmount.toString())} ETH</Td>
-                                            <Td>{contract.initialElo.toString()}</Td>
-                                            <Td>
-                                                <Button isDisabled={!contract.isOpen}
-                                                    onClick={() => handleCloseContract(contract.id.toString())} size="sm">{contract.isOpen ? "Close Contract💲" : "Closed"}</Button>
-                                            </Td>
-                                        </Tr>
-                                    )}
+                                    {teamContracts ?
+                                        <>
+                                            {teamContracts.map((contract) =>
+                                                <Tr>
+                                                    <Td>{contract.quantity.toString()} {contract.team} Tokens</Td>
+                                                    <Td>{ethers.formatEther(contract.initialAmount.toString())} ETH</Td>
+                                                    <Td>{contract.longParty}</Td>
+                                                    <Td>{contract.initialElo.toString()}</Td>
+                                                </Tr>
+                                            )}
+                                        </>
+                                        : <>
+                                            No Backers. Be the first to support the team!
+                                        </>}
                                 </Tbody>
                             </Table>
                         </TableContainer>
