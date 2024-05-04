@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from 'fs'
 import path from 'path'
 import { Wallet, ethers } from "ethers";
-import { OracleContract, getProvider, subscriptionId } from "@/lib/evm/contract";
+import { getProvider } from "@/lib/evm/contract";
+import { OracleContract } from "@/lib/oracle/contract";
 
 async function handler(
     req: NextApiRequest,
@@ -28,7 +29,7 @@ async function handler(
             );
 
             console.log(transaction)
-            return res.status(200).json({ "hello world": "hello" });
+            return res.status(200).json({ "tx": transaction.hash || "" });
         } catch (e: any) {
             return res.status(401).json({ error: e.message });
         }

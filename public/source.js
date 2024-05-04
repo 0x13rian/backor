@@ -1,9 +1,11 @@
 // This functions get details about Star Wars characters. This example will showcase usage of HTTP requests and console.logs.
 // 1, 2, 3 etc.
+// @ts-ignore
 const teamId = args[0]
 
 // Execute the API request (Promise)
 console.log(teamId, `https://backorfade-elo-calc.onrender.com/teams?team=${teamId}`)
+// @ts-ignore
 const apiResponse = await Functions.makeHttpRequest({
     url: `https://backorfade-elo-calc.onrender.com/teams?team=${teamId}`
 })
@@ -18,4 +20,5 @@ const { data } = apiResponse;
 console.log('API response data:', JSON.stringify(data, null, 2));
 
 // Return Character Name
+// @ts-ignore
 return Functions.encodeUint256(parseInt(data.rating))

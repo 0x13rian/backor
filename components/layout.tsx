@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {usePrivy} from '@privy-io/react-auth';
 import Navbar from './navbar';
 import type {NavbarItem} from './navbar';
