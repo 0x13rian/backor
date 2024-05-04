@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     return {
       props: {},
-      redirect: { destination: "/dashboard", permanent: false },
+      redirect: { destination: "/fund", permanent: false },
     };
   } catch (error) {
     return { props: {} };
@@ -39,14 +39,14 @@ export default function LoginPage() {
       </Head>
 
       <main className="flex min-h-screen min-w-full">
-        <div className="flex bg-privy-light-blue flex-1 p-6 justify-center items-center">
+        <div className="flex flex-1 p-6 justify-center items-center">
           <div>
             <div>
               dynasty
             </div>
             <div className="mt-6 flex justify-center text-center">
               <button
-                className="bg-violet-600 hover:bg-violet-700 py-3 px-6 text-white rounded-lg"
+                className="bg-green-600 hover:bg-green-700 py-3 px-6 text-white rounded-lg"
                 onClick={login}
               >
                 Log in

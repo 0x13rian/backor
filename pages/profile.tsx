@@ -62,7 +62,7 @@ export default function ProfilePage() {
   return (
     <>
       <Head>
-        <title>dynasty</title>
+        <title>Dynasty</title>
       </Head>
 
       <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
@@ -70,7 +70,7 @@ export default function ProfilePage() {
           <>
             <Menu />
             <div className="flex flex-row justify-between">
-              <h1 className="text-2xl font-semibold">profile</h1>
+              <h1 className="text-2xl font-semibold">Profile</h1>
               <button
                 onClick={logout}
                 className="text-sm bg-lime-200 hover:text-lime-900 py-2 px-4 rounded-md text-lime-700"

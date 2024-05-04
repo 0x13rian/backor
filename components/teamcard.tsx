@@ -125,7 +125,7 @@ export function TeamCard({
                             
                             <Popover>
                               <PopoverTrigger>
-                                <Button variant='outline' colorScheme='gray' size='lg'>
+                                <Button borderRadius="full" variant='outline' colorScheme='gray' size='lg'>
                                   💲
                                 </Button>
                               </PopoverTrigger>
@@ -141,7 +141,7 @@ export function TeamCard({
 
                             <Popover>
                               <PopoverTrigger>
-                              <Button variant='outline' colorScheme='green' size='lg'>
+                              <Button borderRadius="full" variant='outline' colorScheme='green' size='lg'>
                                   💚
                               </Button>
                               </PopoverTrigger>

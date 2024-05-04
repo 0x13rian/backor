@@ -75,7 +75,7 @@ export default function DashboardPage() {
             <Menu />
             <div className="place-self-end flex items-center mb-8">
               <Stat>
-                <StatLabel>Balance</StatLabel>
+                <StatLabel>balance</StatLabel>
                 <StatNumber>💸 345</StatNumber>
                 <StatHelpText>
                   <StatArrow type='increase' />
