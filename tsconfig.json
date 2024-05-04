@@ -24,6 +24,7 @@
     "noPropertyAccessFromIndexSignature": false,
     "exactOptionalPropertyTypes": false,
     "moduleResolution": "node",
+    "noUnusedLocals": false,
     "paths": {
       "@/*": [
         "./*"

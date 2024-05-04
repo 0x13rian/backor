@@ -2,17 +2,33 @@
 
 import { EloInfo, OracleContract, getProvider } from "@/lib/evm/contract";
 import { Card, CardBody, Stack, Heading, CardFooter, ButtonGroup, Button, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box } from "@chakra-ui/react";
+import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
 
 interface TeamCardProps extends React.HTMLAttributes<HTMLDivElement> {
     team?: string;
-    data?: any[];
+    // data?: any[];
 }
 
 export function TeamCard({
     team = "",
-    data = [],
+    // data = [],
 }: TeamCardProps) {
+    const data = [
+        {
+            "name": "t1",
+            "elo": 2800,
+        },
+        {
+            "name": "t2",
+            "elo": 2900,
+        },
+        {
+            "name": "t3",
+            "elo": 2700,
+        }
+    ]
+
     const [sliderValue, setSliderValue] = useState(1500)
     const [eloInfo, setEloInfo] = useState<EloInfo>({
         elo: BigInt(0),
@@ -61,7 +77,7 @@ export function TeamCard({
     }
 
     return (
-        <>
+        <div className="mb-12">
             <Card maxW='sm'>
                 <CardBody>
                     <Image
@@ -111,8 +127,18 @@ export function TeamCard({
                             <SliderThumb />
                         </Slider>
 
-                    </Stack>
-                </CardBody>
+                        <Heading mb="4" size='md'>Manchester United</Heading>
+
+                        <LineChart width={340} height={200} data={data}
+                            margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="elo" stroke="#82ca9d" />
+                        </LineChart>
+                    </Stack >
+                </CardBody >
                 <CardFooter>
                     <Box
                         display='flex'
@@ -133,8 +159,7 @@ export function TeamCard({
                         </ButtonGroup>
                     </Box>
                 </CardFooter>
-            </Card>
-        </>
-
+            </Card >
+        </div>
     );
 }
