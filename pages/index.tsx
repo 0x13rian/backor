@@ -35,14 +35,14 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        <title>backor</title>
+        <title>dynasty</title>
       </Head>
 
       <main className="flex min-h-screen min-w-full">
         <div className="flex bg-privy-light-blue flex-1 p-6 justify-center items-center">
           <div>
             <div>
-              backor
+              dynasty
             </div>
             <div className="mt-6 flex justify-center text-center">
               <button

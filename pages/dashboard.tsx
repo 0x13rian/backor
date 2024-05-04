@@ -66,14 +66,14 @@ export default function DashboardPage() {
   return (
     <>
       <Head>
-        <title>backor</title>
+        <title>dynasty</title>
       </Head>
 
       <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
         {ready && authenticated ? (
           <>
             <Menu />
-            <div className="place-self-end flex items-center">
+            <div className="place-self-end flex items-center mb-8">
               <Stat>
                 <StatLabel>Balance</StatLabel>
                 <StatNumber>💸 345</StatNumber>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
                   23.36%
                 </StatHelpText>
               </Stat>
-              <Avatar className="ml-8" bg='teal.500' />
+              <Avatar className="ml-8" bg='green.500' />
             </div>
 
             <div className="snap-y snap-mandatory place-self-center overflow-y-scroll">

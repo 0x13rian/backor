@@ -62,7 +62,7 @@ export default function ProfilePage() {
   return (
     <>
       <Head>
-        <title>backor</title>
+        <title>dynasty</title>
       </Head>
 
       <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
@@ -73,7 +73,7 @@ export default function ProfilePage() {
               <h1 className="text-2xl font-semibold">profile</h1>
               <button
                 onClick={logout}
-                className="text-sm bg-violet-200 hover:text-violet-900 py-2 px-4 rounded-md text-violet-700"
+                className="text-sm bg-lime-200 hover:text-lime-900 py-2 px-4 rounded-md text-lime-700"
               >
                 Logout
               </button>
@@ -84,7 +84,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkGoogle(googleSubject);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink Google
@@ -94,7 +94,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     linkGoogle();
                   }}
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white"
                 >
                   Link Google
                 </button>
@@ -105,14 +105,14 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkTwitter(twitterSubject);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink Twitter
                 </button>
               ) : (
                 <button
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white"
                   onClick={() => {
                     linkTwitter();
                   }}
@@ -126,14 +126,14 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkDiscord(discordSubject);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink Discord
                 </button>
               ) : (
                 <button
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white"
                   onClick={() => {
                     linkDiscord();
                   }}
@@ -147,7 +147,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkEmail(email.address);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink email
@@ -155,7 +155,7 @@ export default function ProfilePage() {
               ) : (
                 <button
                   onClick={linkEmail}
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white"
                 >
                   Connect email
                 </button>
@@ -165,7 +165,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkWallet(wallet.address);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink wallet
@@ -173,7 +173,7 @@ export default function ProfilePage() {
               ) : (
                 <button
                   onClick={linkWallet}
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white border-none"
                 >
                   Connect wallet
                 </button>
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                   onClick={() => {
                     unlinkPhone(phone.number);
                   }}
-                  className="text-sm border border-violet-600 hover:border-violet-700 py-2 px-4 rounded-md text-violet-600 hover:text-violet-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
+                  className="text-sm border border-lime-600 hover:border-lime-700 py-2 px-4 rounded-md text-lime-600 hover:text-lime-700 disabled:border-gray-500 disabled:text-gray-500 hover:disabled:text-gray-500"
                   disabled={!canRemoveAccount}
                 >
                   Unlink phone
@@ -191,7 +191,7 @@ export default function ProfilePage() {
               ) : (
                 <button
                   onClick={linkPhone}
-                  className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
+                  className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white border-none"
                 >
                   Connect phone
                 </button>
@@ -199,7 +199,7 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => verifyToken().then(setVerifyResult)}
-                className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
+                className="text-sm bg-lime-600 hover:bg-lime-700 py-2 px-4 rounded-md text-white border-none"
               >
                 Verify token on server
               </button>

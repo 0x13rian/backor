@@ -1,9 +1,10 @@
 "use client"
 
 import { EloInfo, OracleContract, getProvider } from "@/lib/evm/contract";
-import { Card, CardBody, Stack, Heading, CardFooter, ButtonGroup, Button, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box } from "@chakra-ui/react";
+import { Text, Card, CardBody, Stack, Heading, CardFooter, ButtonGroup, Button, Image, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Box, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from "@chakra-ui/react";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, Tooltip } from "recharts";
 import { useEffect, useState } from "react";
+import { randomInt } from "crypto";
 
 interface TeamCardProps extends React.HTMLAttributes<HTMLDivElement> {
     team?: string;
@@ -35,6 +36,8 @@ export function TeamCard({
         timestamp: BigInt(0)
     })
 
+    const [histEloInfo, setHistEloInfo] = useState<any[]>([])
+
     const labelStyles = {
         mt: '2',
         ml: '-2.5',
@@ -61,6 +64,7 @@ export function TeamCard({
         const contract = new OracleContract({ client: getProvider() });
 
         const rating: EloInfo[] = await contract.getTeamEloRankingBetween(team, 0, Date.now());
+        setHistEloInfo(rating.filter((i)=>{return Number(i.elo) != 0}).map((i)=>{return {"time": i.timestamp, "elo": Number(i.elo)}}))
         console.log(rating)
     }
 
@@ -78,12 +82,12 @@ export function TeamCard({
 
     return (
         <div className="mb-12">
-            <Card maxW='sm'>
+            <Card minW='lg'>
                 <CardBody>
-                    <Image
+                    {/* <Image
                         src='https://imageio.forbes.com/specials-images/imageserve/6554be696c4245e50902676e/Fulham-FC-v-Manchester-United---Premier-League/960x0.jpg?format=jpg&width=960'
                         borderRadius='lg'
-                    />
+                    /> */}
                     <Stack mt='6' spacing='3'>
                         <Heading size='md'>{team || "Unknown"}</Heading>
 
@@ -97,43 +101,14 @@ export function TeamCard({
                             Update Team Data on Oracle
                         </button>
                         <div>
-                            Elo: {eloInfo.elo.toString()}
-                        </div>
-                        <div>
-                            Timestamp: {eloInfo.timestamp.toString()}
+                            Rating: {eloInfo.elo.toString()}
                         </div>
 
-                        <Slider defaultValue={1500} min={0} max={3000} step={100} className="mt-12" aria-label='slider-ex-6' onChange={(val) => setSliderValue(val)}>
-                            <SliderMark value={100} {...labelStyles}>
-                                0
-                            </SliderMark>
-                            <SliderMark value={2750} {...labelStyles}>
-                                3000
-                            </SliderMark>
-                            <SliderMark
-                                value={sliderValue}
-                                textAlign='center'
-                                bg='blue.500'
-                                color='white'
-                                mt='-10'
-                                ml='-5'
-                                w='12'
-                            >
-                                {sliderValue}
-                            </SliderMark>
-                            <SliderTrack>
-                                <SliderFilledTrack />
-                            </SliderTrack>
-                            <SliderThumb />
-                        </Slider>
-
-                        <Heading mb="4" size='md'>Manchester United</Heading>
-
-                        <LineChart width={340} height={200} data={data}
-                            margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                        <LineChart width={400} height={200} data={histEloInfo}
+                            margin={{ top: 5, right: 0, left: 10, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
-                            <YAxis />
+                            <YAxis domain={[Math.min(histEloInfo.map(i=>i.elo)) - 100, Math.min(histEloInfo.map(i=>i.elo)) + 100]} />
                             <Tooltip />
                             <Line type="monotone" dataKey="elo" stroke="#82ca9d" />
                         </LineChart>
@@ -147,15 +122,65 @@ export function TeamCard({
                         width='100%'
                     >
                         <ButtonGroup alignItems="center" spacing='12'>
-                            <Button variant='outline' colorScheme='gray' size='lg'>
-                                💲
-                            </Button>
-                            <Button variant='outline' colorScheme='red' size='lg'>
-                                💀
-                            </Button>
-                            <Button variant='outline' colorScheme='green' size='lg'>
-                                💚
-                            </Button>
+                            
+                            <Popover>
+                              <PopoverTrigger>
+                                <Button variant='outline' colorScheme='gray' size='lg'>
+                                  💲
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverBody>
+                                  <Text fontSize='4xl'>💸 345</Text>
+                                  <Button className="mt-8">sell</Button>
+                                </PopoverBody>
+                              </PopoverContent>
+                            </Popover>
+
+                            <Popover>
+                              <PopoverTrigger>
+                              <Button variant='outline' colorScheme='green' size='lg'>
+                                  💚
+                              </Button>
+                              </PopoverTrigger>
+                              <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverHeader>How much would you like to invest?</PopoverHeader>
+                                <PopoverBody>
+                                  <Text fontSize='4xl'>💸 345</Text>
+                                  <Slider colorScheme="green" className="mb-12 mt-12" aria-label='slider' onChange={(val) => setSliderValue(val)}>
+                                    <SliderMark value={25} {...labelStyles}>
+                                      25%
+                                    </SliderMark>
+                                    <SliderMark value={50} {...labelStyles}>
+                                      50%
+                                    </SliderMark>
+                                    <SliderMark value={75} {...labelStyles}>
+                                      75%
+                                    </SliderMark>
+                                    <SliderMark
+                                      value={sliderValue}
+                                      textAlign='center'
+                                      bg='blue.500'
+                                      color='white'
+                                      mt='-10'
+                                      ml='-5'
+                                      w='12'
+                                    >
+                                      {sliderValue}%
+                                    </SliderMark>
+                                    <SliderTrack>
+                                      <SliderFilledTrack />
+                                    </SliderTrack>
+                                    <SliderThumb />
+                                  </Slider>
+                                  <Button colorScheme="green">confirm</Button>
+                                </PopoverBody>
+                              </PopoverContent>
+                            </Popover>
                         </ButtonGroup>
                     </Box>
                 </CardFooter>

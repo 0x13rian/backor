@@ -11,7 +11,7 @@ export function Menu() {
             <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
-                <DrawerHeader borderBottomWidth='1px'>menu</DrawerHeader>
+                <DrawerHeader borderBottomWidth='1px'>dynasty</DrawerHeader>
                 <DrawerBody>
                     <Link className="block" href="/dashboard">home</Link>
                     <Link className="block" href="/profile">profile</Link>
