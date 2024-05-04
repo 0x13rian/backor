@@ -8,6 +8,7 @@ import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { Menu } from "../components/menu";
 import { TeamCard } from "../components/teamcard";
+import { teams as SPORT_TEAMS } from "@/lib/evm/network";
 
 async function verifyToken() {
   const url = "/api/verify";
@@ -47,6 +48,8 @@ export default function DashboardPage() {
     if (ready && !authenticated) {
       router.push("/");
     }
+
+    console.log(user)
   }, [ready, authenticated, router]);
 
   const numAccounts = user?.linkedAccounts?.length || 0;
@@ -84,30 +87,12 @@ export default function DashboardPage() {
 
             <div className="snap-y snap-mandatory place-self-center overflow-y-scroll">
               <div className="h-screen snap-always snap-center">
-                <TeamCard />
+                {SPORT_TEAMS.map((team: string, index: number) =>
+                  <div className="h-screen snap-always snap-center">
+                    <TeamCard key={index} team={team} />
+                  </div>
+                )}
               </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-              <div className="h-screen snap-always snap-center">
-                <TeamCard />
-              </div>
-
             </div>
           </>
         ) : null}
