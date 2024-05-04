@@ -1,14 +1,15 @@
 import Image from 'next/image';
-import {useRouter} from 'next/router';
-import {Fragment} from 'react';
-import {Disclosure, Menu, Transition} from '@headlessui/react';
+import { useRouter } from 'next/router';
+import { Fragment, useEffect } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
   Bars3Icon,
   XMarkIcon,
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
-import {Logo} from './logo';
+import { Logo } from './logo';
+import { usePrivy } from '@privy-io/react-auth';
 
 function classNames(...classes: Array<string | boolean>): string {
   return classes.filter(Boolean).join(' ');
@@ -35,10 +36,28 @@ type NavbarProps = {
   items: Array<NavbarItem>;
 };
 
-export default function Navbar({items, accountId, appName}: NavbarProps) {
+export default function Navbar({ items, accountId, appName }: NavbarProps) {
   const router = useRouter();
   const resourceId = router.query.id;
   const selected = extractTabFromPath(router.pathname);
+  const {
+    ready,
+    authenticated,
+    user,
+    logout,
+  } = usePrivy();
+
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+
+    if (!authenticated) {
+      router.push('/login');
+    }
+
+    console.log('user', user);
+  }, [ready, authenticated]);
 
   const selectedItemClass =
     'hover:cursor-pointer rounded-full bg-gray-900 px-3 py-2 text-lg font-medium text-white';
@@ -54,7 +73,7 @@ export default function Navbar({items, accountId, appName}: NavbarProps) {
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
-      {({open}) => (
+      {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex h-16 items-center justify-between">
@@ -111,8 +130,8 @@ export default function Navbar({items, accountId, appName}: NavbarProps) {
                             className="h-8 w-8 rounded-full"
                             src="/images/avatar.png"
                             alt="avatar placeholder"
-                            // height="32px"
-                            // width="32px"
+                          // height="32px"
+                          // width="32px"
                           />
                         </div>
                       </Menu.Button>
@@ -129,7 +148,7 @@ export default function Navbar({items, accountId, appName}: NavbarProps) {
                     >
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <a
                               href={`/accounts/${accountId}`}
                               className={classNames(
@@ -142,7 +161,7 @@ export default function Navbar({items, accountId, appName}: NavbarProps) {
                           )}
                         </Menu.Item>
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <a
                               href="#"
                               className={classNames(
@@ -155,7 +174,7 @@ export default function Navbar({items, accountId, appName}: NavbarProps) {
                           )}
                         </Menu.Item>
                         <Menu.Item>
-                          {({active}) => (
+                          {({ active }) => (
                             <a
                               href="#"
                               className={classNames(

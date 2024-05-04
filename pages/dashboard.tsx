@@ -9,6 +9,8 @@ import Link from "next/link";
 import { Menu } from "../components/menu";
 import { TeamCard } from "../components/teamcard";
 import { teams as SPORT_TEAMS } from "@/lib/evm/network";
+import { getSigner, getProvider } from "@/lib/evm/contract";
+import { ethers } from "ethers";
 
 async function verifyToken() {
   const url = "/api/verify";
@@ -23,7 +25,7 @@ async function verifyToken() {
 }
 
 export default function DashboardPage() {
-  const [verifyResult, setVerifyResult] = useState();
+  const [userBalance, setUserBalance] = useState("0");
   const router = useRouter();
   const {
     ready,
@@ -63,6 +65,21 @@ export default function DashboardPage() {
   const twitterSubject = user?.twitter?.subject || null;
   const discordSubject = user?.discord?.subject || null;
 
+  const getBalance = async () => {
+    const provider = getProvider();
+    const signer = await getSigner()
+    const address = signer.getAddress()
+    const balance = await provider.getBalance(address);
+    return balance
+  }
+
+  useEffect(() => {
+    (async () => {
+      const balance = await getBalance();
+      setUserBalance(ethers.formatEther(balance).slice(0, 5));
+    })()
+  }, [])
+
   return (
     <>
       <Head>
@@ -72,27 +89,22 @@ export default function DashboardPage() {
       <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
         {ready && authenticated ? (
           <>
-            <Menu />
-            <div className="place-self-end flex items-center mb-8">
-              <Stat>
-                <StatLabel>Balance</StatLabel>
-                <StatNumber>💸 345</StatNumber>
-                <StatHelpText>
-                  <StatArrow type='increase' />
-                  23.36%
-                </StatHelpText>
-              </Stat>
-              <Avatar className="ml-8" bg='green.500' />
-            </div>
-
-            <div className="snap-y snap-mandatory place-self-center overflow-y-scroll">
-              <div className="h-screen snap-always snap-center">
-                {SPORT_TEAMS.map((team: string, index: number) =>
-                  <div className="h-screen snap-always snap-center">
-                    <TeamCard key={index} team={team} />
-                  </div>
-                )}
+            <div className="flex items-center justify-between mb-8">
+              <Menu />
+              <div className="place-self-end flex items-center mb-8">
+                <Stat>
+                  <StatLabel>Balance</StatLabel>
+                  <StatNumber>💸 {userBalance} ETH</StatNumber>
+                </Stat>
+                <Avatar className="ml-8" bg='green.500' />
               </div>
+            </div>
+            <div className="snap-y snap-mandatory place-self-center">
+              {SPORT_TEAMS.map((team: string, index: number) =>
+                <div className="h-screen snap-always snap-center overflow-y-auto">
+                  <TeamCard key={index} team={team} />
+                </div>
+              )}
             </div>
           </>
         ) : null}
