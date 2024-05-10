@@ -79,17 +79,19 @@ export function TeamCard({
     }
 
     const loadTeamRatingHistory = async () => {
-        const contract = new OracleContract({ client: getProvider() });
+        try {
+            const contract = new OracleContract({ client: getProvider() });
 
-        const rating: EloInfo[] = await contract.getTeamEloRankingBetween(team, 0, Date.now());
-        setHistEloInfo(rating.filter((i) => { return Number(i.elo) != 0 }).map((i) => { return { "time": i.timestamp, "elo": Number(i.elo) } }))
-        if (rating.length > 0) {
-            console.log("HI")
-            console.log(rating)
-            let diff = Number(rating[rating.length - 1].elo - rating[rating.length - 2].elo)
-            setRatingChange(diff)
-            console.log(diff)
-            console.log(diff > 0)
+            const rating: EloInfo[] = await contract.getTeamEloRankingBetween(team, 0, Date.now());
+            setHistEloInfo(rating.filter((i) => { return Number(i.elo) != 0 }).map((i) => { return { "time": i.timestamp, "elo": Number(i.elo) } }))
+            if (rating.length > 0) {
+                let diff = Number(rating[rating.length - 1].elo - rating[rating.length - 2].elo)
+                setRatingChange(diff)
+                console.log(diff)
+                console.log(diff > 0)
+            }
+        } catch (err: any) {
+            console.log("Error in loadTeamRatingHistory")
         }
     }
 
@@ -188,8 +190,8 @@ export function TeamCard({
     };
     return (
         <Card minW='md' background={"url(/images/BG.png) no-repeat center center"}
-            backgroundSize="cover" 
-       >
+            backgroundSize="cover"
+        >
             <CardBody>
                 <Stack mt='6' spacing='3'>
                     <div className="flex items-center mb-8">
